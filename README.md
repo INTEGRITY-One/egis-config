@@ -1,0 +1,2 @@
+# egis-config
+Config microservice
