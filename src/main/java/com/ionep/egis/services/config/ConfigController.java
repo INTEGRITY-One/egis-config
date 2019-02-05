@@ -22,7 +22,7 @@ public class ConfigController {
     	Collection<City> cities = new ArrayList<City>();
     	// TODO: Retrieve ALL Cities from the PostgreSQL database
         	
-    	cities.add(new City(0, "Ashburn", "20147", 1.1, 1.1));	// Fake it for now...
+    	cities.add(new City(0, "Ashburn", "20147", 1, 1.1, 1.1));	// Fake it for now...
     	        
     	return cities;
 	}
@@ -36,12 +36,12 @@ public class ConfigController {
 		if (id == 0) {
 			// TODO: Retrieve ALL Cities from the PostgreSQL database
 	    	
-			c = new City(0, "Ashburn", "20147", 1.1, 1.1);	// Fake it for now...
+			c = new City(0, "Ashburn", "20147", 1, 1.1, 1.1);	// Fake it for now...
 		}
 	    else {
 	    	// TODO: Retrieve single City from the PostgreSQL database
 	    	
-	    	c = new City(0, "Ashburn", "20147", 1.1, 1.1);	// Fake it for now...
+	    	c = new City(0, "Ashburn", "20147", 1, 1.1, 1.1);	// Fake it for now...
 	    }
 	    
 		return c;
@@ -53,10 +53,11 @@ public class ConfigController {
 	)
 	public City create(@RequestParam(value="name") String name,
 			@RequestParam(value="postalCode", defaultValue="novalue") String postalCode,
+			@RequestParam(value="country", defaultValue="1") int countryCode,
 			@RequestParam(value="lat", defaultValue="0.0") double latitude,
 			@RequestParam(value="long", defaultValue="0.0") double longitude) {
 	    // Create new city
-	    City newCity = new City(counter.incrementAndGet(), name, postalCode, latitude, longitude);
+	    City newCity = new City(counter.incrementAndGet(), name, postalCode, countryCode, latitude, longitude);
 	    
 	    // TODO: Store the city to the PostgreSQL database
 	    

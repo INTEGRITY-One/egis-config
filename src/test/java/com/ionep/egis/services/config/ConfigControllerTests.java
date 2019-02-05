@@ -43,6 +43,7 @@ public class ConfigControllerTests {
         this.mockMvc.perform(get("/weather/cities/0")).andDo(print()).andExpect(status().isOk())
                 .andExpect(jsonPath("$.name").value("Ashburn"))
                 .andExpect(jsonPath("$.postalCode").value("20147"))
+                .andExpect(jsonPath("$.countryCode").value("1"))
                 .andExpect(jsonPath("$.latitude").value("1.1"))
                 .andExpect(jsonPath("$.longitude").value("1.1"));
     }
@@ -53,6 +54,7 @@ public class ConfigControllerTests {
         this.mockMvc.perform(get("/weather/cities")).andDo(print()).andExpect(status().isOk())
                 .andExpect(jsonPath("$[0].name").value("Ashburn"))
                 .andExpect(jsonPath("$[0].postalCode").value("20147"))
+                .andExpect(jsonPath("$[0].countryCode").value("1"))
                 .andExpect(jsonPath("$[0].latitude").value("1.1"))
                 .andExpect(jsonPath("$[0].longitude").value("1.1"));
     }
@@ -61,10 +63,11 @@ public class ConfigControllerTests {
     public void createNewCity() throws Exception {
 
         this.mockMvc.perform(post("/weather/cities").param("name", "Test City")
-        		.param("postalCode", "20188").param("lat", "2.1").param("long", "2.2"))
+        		.param("postalCode", "20188").param("country", "2").param("lat", "2.1").param("long", "2.2"))
                 .andDo(print()).andExpect(status().isOk())
                 .andExpect(jsonPath("$.name").value("Test City"))
                 .andExpect(jsonPath("$.postalCode").value("20188"))
+                .andExpect(jsonPath("$.countryCode").value("2"))
                 .andExpect(jsonPath("$.latitude").value("2.1"))
                 .andExpect(jsonPath("$.longitude").value("2.2"));
     }
