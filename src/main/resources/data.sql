@@ -1,0 +1,1 @@
+insert into EGIS_WEATHER.CITY (ID, NAME, POSTAL_CODE, COUNTRY_CODE, LATITUDE, LONGITUDE) values (0, 'Ashburn', '20147', 1, 1.1, 1.1);
