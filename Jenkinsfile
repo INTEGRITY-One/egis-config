@@ -5,7 +5,9 @@ pipeline {
   stages {
     stage('Build App') {
       steps {
-        sh "mvn clean install"
+      	withMaven() {
+          sh "mvn clean install"
+        }
       }
     }
     stage('Create Image Builder') {
