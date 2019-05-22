@@ -1,13 +1,11 @@
 pipeline {
   agent {
-  	label 'master'
+  	label 'maven'
   }
   stages {
     stage('Build App') {
       steps {
-      	withMaven() {
-          sh "mvn clean install"
-        }
+        sh "mvn clean install"
       }
     }
     stage('Create Image Builder') {
