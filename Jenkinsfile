@@ -3,12 +3,7 @@ pipeline {
   	label 'maven'
   }
   stages {
-    stage('Build App') {
-      steps {
-        sh "mvn clean install"
-      }
-    }
-    stage('Create Image Builder') {
+    stage('Create BuildConfig') {
       when {
         expression {
           openshift.withCluster() {
@@ -20,17 +15,17 @@ pipeline {
         script {
           openshift.withCluster() {
             openshift.createResource(
-               '{"apiVersion": "build.openshift.io/v1","kind": "BuildConfig","metadata": {"annotations": {"description": "Defines how to build the application"},"labels": {"app": "config-svc"},"name": "config-svc-buildconfig","namespace": "egis"},"spec": {"failedBuildsHistoryLimit": "5","output": {"to": {"kind": "ImageStreamTag","name": "config-svc:latest"}},"postCommit": {"script": ""},"runPolicy": "Serial","source": {"git": {"uri": "https://github.com/INTEGRITY-One/egis-config.git"},"type": "Git"},"strategy": {"type": "Docker"},"successfulBuildsHistoryLimit": "5"}}',
+               '{"apiVersion": "build.openshift.io/v1","kind": "BuildConfig","metadata": {"annotations": {"description": "Defines how to build the application"},"labels": {"app": "config-svc"},"name": "config-svc-buildconfig","namespace": "egis"},"spec": {"failedBuildsHistoryLimit": "5","output": {"to": {"kind": "ImageStreamTag","name": "config-svc:latest"}},"postCommit": {"script": ""}, "runPolicy": "Serial","source": {"git": {"uri": "https://github.com/INTEGRITY-One/egis-config.git"},"type": "Git"},"strategy": {"type": "Source","sourceStrategy": {"from": {"kind": "ImageStream","namespace": "openshift","name": "java"}}},"successfulBuildsHistoryLimit": "5"}}'
             )
           }
         }
       }
     }
-    stage('Build Image') {
+    stage('Execute Build') {
       steps {
         script {
           openshift.withCluster() {
-            openshift.selector("bc", "config-svc-buildconfig").startBuild("--from-file=target/config-svc.jar", "--wait")
+            openshift.selector("bc", "config-svc-buildconfig").startBuild("--wait")
           }
         }
       }
