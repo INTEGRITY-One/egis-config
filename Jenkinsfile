@@ -19,7 +19,37 @@ pipeline {
       steps {
         script {
           openshift.withCluster() {
-            openshift.newBuild("--name=config-svc-buildconfig", "--image-stream=redhat-openjdk18-openshift:1.1", "--binary")
+            openshift.createResource(
+               "apiVersion: build.openshift.io/v1
+kind: BuildConfig
+metadata:
+  annotations:
+    description: Defines how to build the application
+  labels:
+    app: config-svc
+  name: config-svc-buildconfig
+  namespace: egis
+spec:
+  failedBuildsHistoryLimit: 5
+  output:
+    to:
+      kind: ImageStreamTag
+      name: 'config-svc:latest'
+  postCommit:
+    script: 
+  runPolicy: Serial
+  source:
+    dockerFile:
+      uri: 'https://github.com/INTEGRITY-One/egis-config.git'
+    type: Git
+  strategy:
+    dockerStrategy:
+      type: Docker
+  successfulBuildsHistoryLimit: 5
+  triggers:
+    - imagechange:
+      type: ImageChange",
+            )
           }
         }
       }
