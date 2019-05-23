@@ -20,35 +20,7 @@ pipeline {
         script {
           openshift.withCluster() {
             openshift.createResource(
-               "apiVersion: build.openshift.io/v1
-kind: BuildConfig
-metadata:
-  annotations:
-    description: Defines how to build the application
-  labels:
-    app: config-svc
-  name: config-svc-buildconfig
-  namespace: egis
-spec:
-  failedBuildsHistoryLimit: 5
-  output:
-    to:
-      kind: ImageStreamTag
-      name: 'config-svc:latest'
-  postCommit:
-    script: 
-  runPolicy: Serial
-  source:
-    dockerFile:
-      uri: 'https://github.com/INTEGRITY-One/egis-config.git'
-    type: Git
-  strategy:
-    dockerStrategy:
-      type: Docker
-  successfulBuildsHistoryLimit: 5
-  triggers:
-    - imagechange:
-      type: ImageChange",
+               '{"apiVersion": "build.openshift.io/v1","kind": "BuildConfig","metadata": {"annotations": {"description": "Defines how to build the application"},"labels": {"app": "config-svc"},"name": "config-svc-buildconfig","namespace": "egis"},"spec": {"failedBuildsHistoryLimit": "5","output": {"to": {"kind": "ImageStreamTag","name": "config-svc:latest"}},"postCommit": {"script": ""},"runPolicy": "Serial","source": {"git": {"uri": "https://github.com/INTEGRITY-One/egis-config.git"},"type": "Git"},"strategy": {"type": "Docker"},"successfulBuildsHistoryLimit": "5"}}',
             )
           }
         }
